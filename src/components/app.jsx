@@ -12,26 +12,27 @@ class App extends Component {
 
     this.state = {
       gifs: [],
-      selectedGifId: "xT9IgDEI1iZyb2wqo8"
+      selectedGifId: null // "xT9IgDEI1iZyb2wqo8"
     }
   }
 
   search = (query) => {
-    giphy('x6JrVxEJFVoaC5xNKNV7ETuMxyLWcvRI').search({
-      q: query,
-      rating: 'g',
-      limit: 10
-    }, (error, result) => {
-      this.setState({
-        gifs: result.data
+    giphy({ apiKey: process.env.REACT_APP_GIPHY_API_KEY, https: true })
+      .search({
+        q: query,
+        rating: 'g',
+        limit: 10
+      }, (error, result) => {
+        this.setState({
+          gifs: result.data
+        });
       });
-    });
   }
 
-  handleClick = (event) => {
+  selectGif = (id) => {
     this.setState({
-      selectedGifId: event.target.dataset.id
-    })
+      selectedGifId: id
+    });
   }
 
   render() {
@@ -44,7 +45,7 @@ class App extends Component {
           </div>
         </div>
         <div className="right-scene">
-          <GifList gifs={this.state.gifs} handleClick={this.handleClick} />
+          <GifList gifs={this.state.gifs} selectGif={this.selectGif} />
         </div>
       </div>
     );
